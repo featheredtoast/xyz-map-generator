@@ -152,7 +152,7 @@ def init
 end
 
 def clean
-  FileUtils.rm_r ROOT_FOLDER
+  FileUtils.rm_r ROOT_FOLDER, force: true
 end
 
 def run
