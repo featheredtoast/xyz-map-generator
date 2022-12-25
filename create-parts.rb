@@ -70,13 +70,24 @@ end
 
 # 256x256px final sizes
 # resize to 256 in the final passes.
-# TODO: Resize all 22 levels to 256px
-# Resizes a set of files in a folder
-def final_resize_pass(tile_folder)
-  Dir.foreach(tile_folder) do |filename|
-    next unless filename =~ /png$/
-    file = tile_folder + filename
-    resize_image(file, file)
+# Resize all levels to 256px
+def final_resize_pass
+  puts "final resize to 256px, this may take a while be patient..."
+  Dir.foreach(ROOT_FOLDER) do |z|
+    next if z == "." || z == ".."
+    z_folder = File.join(ROOT_FOLDER, "#{z}")
+
+    Dir.foreach(z_folder) do |x|
+      next if x == "." || x == ".."
+      x_folder = File.join(z_folder, "#{x}")
+
+      puts "resizing z, x: #{z}, #{x}"
+      Dir.foreach(x_folder) do |filename|
+        next unless filename =~ /png$/
+        image = File.join(x_folder, filename)
+        resize_image(image, image)
+      end
+    end
   end
 end
 
@@ -121,11 +132,21 @@ def make_prev_zoom(z, x, y)
   { x: zoom_x, y: zoom_y, z: z - 1 }
 end
 
+def start_position
+  x = (2**START_LEVEL) / 2
+  y = (2**START_LEVEL) / 2
+  { x: x, y: y, z: START_LEVEL }
+end
+
 def init
+  xyz = start_position
+  x = xyz[:x]
+  y = xyz[:y]
+  z = xyz[:z]
   original_file = File.join(__dir__, "satisfactory-map.png")
-  folder_name = File.join(ROOT_FOLDER, "#{START_LEVEL }", "#{(2**START_LEVEL) / 2 }")
+  folder_name = File.join(ROOT_FOLDER, "#{z}", "#{x}")
   FileUtils.mkdir_p folder_name
-  file = File.join(folder_name, "#{(2**START_LEVEL) / 2}.png")
+  file = File.join(folder_name, "#{y}.png")
   FileUtils.cp(original_file, file)
   file
 end
@@ -137,12 +158,16 @@ end
 def run
   clean
   init
-  (START_LEVEL..18).each do |level|
+  xyz = start_position
+  puts "making zoom out levels..."
+  (START_LEVEL.downto(8)).each do |level|
+    xyz = make_prev_zoom(xyz[:z], xyz[:x], xyz[:y])
+  end
+  puts "making zoom in levels..."
+  (START_LEVEL..17).each do |level|
     make_next_zoom level
   end
+  final_resize_pass
 end
 
-#final_resize_pass("./parts/14/8192/")
-
-#run
-make_prev_zoom(13, 4096, 4096)
+run
