@@ -89,7 +89,8 @@ end
 # Append a list of four images in a grid
 # upper left, upper right, lower left, lower right
 def append(ul, ur, ll, lr, target)
-  `magick "(#{ul} #{ur} +append) (#{ll} #{lr} +append)" -background none -append "#{target}"`
+  cmd = "magick \\( \"#{ul}\" \"#{ur}\" +append \\) \\( \"#{ll}\" \"#{lr}\" +append \\) -background none -append \"#{target}\""
+  `#{cmd}`
 end
 
 def make_prev_zoom(z, x, y)
@@ -105,17 +106,18 @@ def make_prev_zoom(z, x, y)
   fill = File.join(__dir__, "satisfactory-map-fill.png")
   if x.odd? && y.odd?
     # up left
-    append(image, fill, fill, fill, target)
+    append(resized, fill, fill, fill, target)
   elsif x.even? && y.odd?
     # up right
-    append(fill, image, fill, fill, target)
+    append(fill, resized, fill, fill, target)
   elsif x.odd? && y.even?
     # down left
-    append(fill, fill, image, fill, target)
+    append(fill, fill, resized, fill, target)
   else
     # down right
-    append(fill, fill, fill, image, target)
+    append(fill, fill, fill, resized, target)
   end
+  FileUtils.rm resized
 end
 
 def init
@@ -141,4 +143,5 @@ end
 
 #final_resize_pass("./parts/14/8192/")
 
-run
+#run
+make_prev_zoom(13, 4096, 4096)
