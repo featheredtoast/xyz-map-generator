@@ -44,10 +44,14 @@ def make_next_tileset(tile)
 end
 
 def make_next_zoom(tile_folder)
-  Dir.foreach(tile_folder) do |filename|
-    next unless filename =~ /png$/
-    file = File.join(tile_folder, filename)
-    make_next_tileset file
+  Dir.foreach(tile_folder) do |x_folder|
+    next if x_folder == "." || x_folder == ".."
+
+    Dir.foreach(File.join(tile_folder, x_folder)) do |filename|
+      next unless filename =~ /png$/
+      file = File.join(tile_folder, x_folder, filename)
+      make_next_tileset file
+    end
   end
 end
 
@@ -77,7 +81,6 @@ end
 
 #final_resize_pass("./parts/14/8192/")
 
-#make_next_tileset(ROOT_FOLDER + "14/8192/8192.png")
 clean
 init
-make_next_zoom File.join(ROOT_FOLDER, "#{14 }", "#{8192 }")
+make_next_zoom File.join(ROOT_FOLDER, "#{14}")
