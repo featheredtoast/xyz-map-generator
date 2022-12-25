@@ -25,8 +25,8 @@ def make_next_tileset(tile)
   y = xyz[:y]
   z = xyz[:z]
 
-  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x * 2) - 1 }")
-  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{x * 2 }")
+  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x * 2)}")
+  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x * 2) + 1}")
   FileUtils.mkdir_p parts_folder_1
   FileUtils.mkdir_p parts_folder_2
 
@@ -40,10 +40,10 @@ def make_next_tileset(tile)
   temp_file_3 = File.join(ROOT_FOLDER, "temp_1.png")
   temp_file_4 = File.join(ROOT_FOLDER, "temp_3.png")
 
-  new_file_1 = File.join(parts_folder_1,  "#{(y * 2) - 1}.png")
-  new_file_2 = File.join(parts_folder_1,  "#{(y * 2)}.png")
-  new_file_3 = File.join(parts_folder_2,  "#{(y * 2) - 1}.png")
-  new_file_4 = File.join(parts_folder_2,  "#{(y * 2)}.png")
+  new_file_1 = File.join(parts_folder_1,  "#{(y * 2)}.png")
+  new_file_2 = File.join(parts_folder_1,  "#{(y * 2) + 1}.png")
+  new_file_3 = File.join(parts_folder_2,  "#{(y * 2)}.png")
+  new_file_4 = File.join(parts_folder_2,  "#{(y * 2) + 1}.png")
 
   FileUtils.mv(temp_file_1, new_file_1)
   FileUtils.mv(temp_file_2, new_file_2)
@@ -106,8 +106,8 @@ end
 
 def make_prev_zoom(z, x, y)
   image = File.join(ROOT_FOLDER, "#{z}", "#{x}", "#{y}.png")
-  zoom_x = x.odd? ? (x + 1) / 2 : x / 2
-  zoom_y = y.odd? ? (y + 1) / 2 : y / 2
+  zoom_x = x.odd? ? (x - 1) / 2 : x / 2
+  zoom_y = y.odd? ? (y - 1) / 2 : y / 2
 
   target_folder = File.join(ROOT_FOLDER, "#{z - 1}", "#{zoom_x}")
   FileUtils.mkdir_p target_folder
@@ -133,8 +133,8 @@ def make_prev_zoom(z, x, y)
 end
 
 def start_position
-  x = (2**START_LEVEL) / 2
-  y = (2**START_LEVEL) / 2
+  x = ((2**START_LEVEL) / 2) + 1
+  y = ((2**START_LEVEL) / 2) + 1
   { x: x, y: y, z: START_LEVEL }
 end
 
