@@ -43,7 +43,8 @@ def make_next_tileset(tile)
   FileUtils.mv(temp_file_4, new_file_4)
 end
 
-def make_next_zoom(tile_folder)
+def make_next_zoom(z)
+  tile_folder = File.join(ROOT_FOLDER, "#{z}")
   Dir.foreach(tile_folder) do |x_folder|
     next if x_folder == "." || x_folder == ".."
 
@@ -83,4 +84,4 @@ end
 
 clean
 init
-make_next_zoom File.join(ROOT_FOLDER, "#{14}")
+make_next_zoom START_LEVEL
