@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require 'fileutils'
 
 ROOT_FOLDER = "#{__dir__}/parts/"
-START_LEVEL= 14
+START_LEVEL = 14
 # starting zoom is 14. up to 22. So 8 passes.
 # Then join with black spaces to generate down to 1. 13 passes.
 def make_next_tileset(tile)
@@ -11,8 +12,8 @@ def make_next_tileset(tile)
   x = Integer(parts[1])
   y = Integer(parts[2].gsub(".png", ""))
 
-  parts_folder_1 = "#{ROOT_FOLDER}#{z+1}/#{(x**2)-1}"
-  parts_folder_2 = "#{ROOT_FOLDER}#{z+1}/#{x**2}"
+  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x**2) - 1 }")
+  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{x**2 }")
   FileUtils.mkdir_p parts_folder_1
   FileUtils.mkdir_p parts_folder_2
 
@@ -21,6 +22,16 @@ def make_next_tileset(tile)
   # new-x = x^2-1, x^2
   # new-y = y^2-1, y^2
   # original size: 1920x1920 -- crop and split from here. resize *up* to 256.
+end
+
+def make_next_zoom(tile_folder)
+  Dir.foreach(tile_folder) do |filename|
+    next unless filename =~ /png$/
+    file = tile_folder + filename
+    puts file
+    puts ROOT_FOLDER
+    #make_next_tileset file
+  end
 end
 
 # 256x256px final sizes
@@ -36,10 +47,10 @@ def final_resize_pass(tile_folder)
 end
 
 def init
-  original_file = "#{__dir__}/satisfactory-map.png"
-  folder_name = "#{ROOT_FOLDER}#{(2**14)/2}/"
+  original_file = File.join(__dir__, "satisfactory-map.png")
+  folder_name = File.join(ROOT_FOLDER, "#{START_LEVEL }", "#{(2**14) / 2 }")
   FileUtils.mkdir_p folder_name
-  file = "#{folder_name}#{(2**14)/2}.png"
+  file = File.join(folder_name, "#{(2**14) / 2}.png")
   FileUtils.cp(original_file, file)
 end
 
@@ -50,4 +61,6 @@ end
 #final_resize_pass("./parts/14/8192/")
 
 #make_next_tileset(ROOT_FOLDER + "14/8192/8192.png")
+#clean
 init
+make_next_zoom File.join(ROOT_FOLDER, "#{14 }", "#{8192 }")
