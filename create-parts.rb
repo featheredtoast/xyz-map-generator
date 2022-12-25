@@ -133,8 +133,8 @@ def make_prev_zoom(z, x, y)
 end
 
 def start_position
-  x = ((2**START_LEVEL) / 2) + 1
-  y = ((2**START_LEVEL) / 2) + 1
+  x = ((2**START_LEVEL) / 2)
+  y = ((2**START_LEVEL) / 2)
   { x: x, y: y, z: START_LEVEL }
 end
 
