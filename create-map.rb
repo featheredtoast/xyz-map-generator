@@ -2,7 +2,11 @@
 require 'fileutils'
 
 ROOT_FOLDER = "#{__dir__}/map/"
-START_LEVEL = 13
+
+# 10KM map size to approximate game map
+START_LEVEL = 12
+MAX_ZOOM = START_LEVEL + 4
+MIN_ZOOM = START_LEVEL - 5
 # starting zoom is 14. up to 22. So 8 passes.
 # Then join with black spaces to generate down to 1. 13 passes.
 # split filename - get current zoom level, x and y
@@ -115,13 +119,13 @@ def make_prev_zoom(z, x, y)
 
   resized = resize_before_merge(image)
   fill = File.join(__dir__, "satisfactory-map-fill.png")
-  if x.odd? && y.odd?
+  if x.even? && y.even?
     # up left
     append(resized, fill, fill, fill, target)
-  elsif x.even? && y.odd?
+  elsif x.odd? && y.even?
     # up right
     append(fill, resized, fill, fill, target)
-  elsif x.odd? && y.even?
+  elsif x.even? && y.odd?
     # down left
     append(fill, fill, resized, fill, target)
   else
@@ -160,11 +164,11 @@ def run
   init
   xyz = start_position
   puts "making zoom out levels..."
-  (START_LEVEL.downto(8)).each do |level|
+  (START_LEVEL.downto(MIN_ZOOM)).each do |level|
     xyz = make_prev_zoom(xyz[:z], xyz[:x], xyz[:y])
   end
   puts "making zoom in levels..."
-  (START_LEVEL..17).each do |level|
+  (START_LEVEL..MAX_ZOOM).each do |level|
     make_next_zoom level
   end
   final_resize_pass
