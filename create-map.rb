@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'fileutils'
 
-ROOT_FOLDER = "#{__dir__}/parts/"
+ROOT_FOLDER = "#{__dir__}/map/"
 START_LEVEL = 13
 # starting zoom is 14. up to 22. So 8 passes.
 # Then join with black spaces to generate down to 1. 13 passes.
