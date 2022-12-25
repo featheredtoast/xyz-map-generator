@@ -118,6 +118,7 @@ def make_prev_zoom(z, x, y)
     append(fill, fill, fill, resized, target)
   end
   FileUtils.rm resized
+  { x: zoom_x, y: zoom_y, z: z - 1 }
 end
 
 def init
