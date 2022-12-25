@@ -9,23 +9,23 @@ def make_next_tileset(tile)
   parts = tile.gsub(ROOT_FOLDER, "").split("/")
   puts parts
   z = Integer(parts[0])
-  y = Integer(parts[1])
-  x = Integer(parts[2].gsub(".png", ""))
+  x = Integer(parts[1])
+  y = Integer(parts[2].gsub(".png", ""))
 
-  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(y**2) - 1 }")
-  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{y**2 }")
+  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x**2) - 1 }")
+  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{x**2 }")
   FileUtils.mkdir_p parts_folder_1
   FileUtils.mkdir_p parts_folder_2
 
-  new_file_1 = File.join(parts_folder_1,  "#{(x**2) - 1}.png")
-  new_file_2 = File.join(parts_folder_1,  "#{(x**2)}.png")
-  new_file_3 = File.join(parts_folder_2,  "#{(x**2) - 1}.png")
-  new_file_4 = File.join(parts_folder_2,  "#{(x**2)}.png")
+  new_file_1 = File.join(parts_folder_1,  "#{(y**2) - 1}.png")
+  new_file_2 = File.join(parts_folder_1,  "#{(y**2)}.png")
+  new_file_3 = File.join(parts_folder_2,  "#{(y**2) - 1}.png")
+  new_file_4 = File.join(parts_folder_2,  "#{(y**2)}.png")
 
   # split filename - get current zoom level, x and y
   # next 4 tiles is: current zoom ++
-  # new-y = y^2-1, y^2
   # new-x = x^2-1, x^2
+  # new-y = y^2-1, y^2
   # original size: 1920x1920 -- crop and split from here. resize *up* to 256.
 end
 
