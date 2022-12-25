@@ -9,28 +9,31 @@ def make_next_tileset(tile)
   parts = tile.gsub(ROOT_FOLDER, "").split("/")
   puts parts
   z = Integer(parts[0])
-  x = Integer(parts[1])
-  y = Integer(parts[2].gsub(".png", ""))
+  y = Integer(parts[1])
+  x = Integer(parts[2].gsub(".png", ""))
 
-  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(x**2) - 1 }")
-  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{x**2 }")
+  parts_folder_1 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{(y**2) - 1 }")
+  parts_folder_2 = File.join(ROOT_FOLDER, "#{z  + 1 }", "#{y**2 }")
   FileUtils.mkdir_p parts_folder_1
   FileUtils.mkdir_p parts_folder_2
 
+  new_file_1 = File.join(parts_folder_1,  "#{(x**2) - 1}.png")
+  new_file_2 = File.join(parts_folder_1,  "#{(x**2)}.png")
+  new_file_3 = File.join(parts_folder_2,  "#{(x**2) - 1}.png")
+  new_file_4 = File.join(parts_folder_2,  "#{(x**2)}.png")
+
   # split filename - get current zoom level, x and y
   # next 4 tiles is: current zoom ++
-  # new-x = x^2-1, x^2
   # new-y = y^2-1, y^2
+  # new-x = x^2-1, x^2
   # original size: 1920x1920 -- crop and split from here. resize *up* to 256.
 end
 
 def make_next_zoom(tile_folder)
   Dir.foreach(tile_folder) do |filename|
     next unless filename =~ /png$/
-    file = tile_folder + filename
-    puts file
-    puts ROOT_FOLDER
-    #make_next_tileset file
+    file = File.join(tile_folder, filename)
+    make_next_tileset file
   end
 end
 
@@ -61,6 +64,6 @@ end
 #final_resize_pass("./parts/14/8192/")
 
 #make_next_tileset(ROOT_FOLDER + "14/8192/8192.png")
-#clean
+clean
 init
 make_next_zoom File.join(ROOT_FOLDER, "#{14 }", "#{8192 }")
